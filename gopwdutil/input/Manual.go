@@ -26,7 +26,7 @@ func Manual(ppwd *[]rune, minLength int, maxLength int) {
 		new_pwd = append(new_pwd, r)
 	}
 
-	if len(new_pwd) < 8 || len(new_pwd) > 16 {
+	if len(new_pwd) < minLength || len(new_pwd) > maxLength {
 		fmt.Println("Error: invalid password length.")
 		return
 	}

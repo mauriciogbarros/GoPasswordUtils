@@ -8,11 +8,9 @@ import (
 
 func MainMenu() {
 	const minLength = 8
-	const capacity = 256
+	const maxLength = 256
 
-	fmt.Printf("Min length: %d, Capacity: %d\n", minLength, capacity)
-	maxLength := 0
-	maxLength = tools.SetMaxLength(minLength, capacity)
+	fmt.Printf("Min length: %d, Max length: %d\n", minLength, maxLength)
 	pwd := make([]rune, 0, maxLength)
 	for i := range pwd { pwd[i] = 0 }
 	exit := false
@@ -42,12 +40,11 @@ func MainMenu() {
 		fmt.Println()
 
 		if choice == 0 {
-		fmt.Println("Erasing password...")
-		for i := range pwd { pwd[i] = 0}
-		fmt.Println()
-		fmt.Println("Password erased.")
-
 			exit = true
+			fmt.Println("Erasing password...")
+			for i := range pwd { pwd[i] = 0}
+			fmt.Println()
+			fmt.Println("Password erased.")
 		} else {
 			if length > 0 {
 				switch choice {

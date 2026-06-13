@@ -22,7 +22,7 @@ func Random(ppwd *[]rune, minLength int, maxLength int) {
 		return
 	}
 
-	if length < 8 || length > 16 {
+	if length < minLength || length > maxLength {
 		fmt.Println("Error: invalid length")
 		return
 	}

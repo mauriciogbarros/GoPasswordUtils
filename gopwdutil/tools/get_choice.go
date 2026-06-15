@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-func GetMenuChoice(maxOption int) int {
-	line, _ := reader.ReadString('\n')
+func GetChoice(maxOption int) int {
+	line, _ := Reader.ReadString('\n')
 	raw := strings.TrimRight(line, "\r\n")
 	choice, err := strconv.Atoi(raw)
 	if err != nil {

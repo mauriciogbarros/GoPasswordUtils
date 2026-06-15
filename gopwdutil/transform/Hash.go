@@ -2,6 +2,7 @@ package transform
 
 import (
 	"fmt"
+	"gopwdutil/tools"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -14,18 +15,14 @@ func Hash(ppwd *[]byte) {
 		fmt.Println("Error: failed to hash.")
 		return
 	}
-	
-	err = bcrypt.CompareHashAndPassword(hash, *ppwd)
-	if err != nil {
-		fmt.Println("Error: hash and password don't match")
-		return
-	}
-
 	fmt.Println("Password hashed")
-	for i := range *ppwd { (*ppwd)[i] = 0 }
-	for i := range hash { 
-		*ppwd = append(*ppwd, hash[i])
-		hash[i] = 0
-	}
+	// Zero out the original password bytes before overwriting with the hash
+	tools.Reset(ppwd)
+
+	// Copy hash into ppwd
+	*ppwd = append(*ppwd, hash...)
+
+	// Zero out hash
+	tools.Reset(&hash)
 	fmt.Println("Hash erased")
 }

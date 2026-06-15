@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"gopwdutil/tools"
 	"gopwdutil/ui"
 	"gopwdutil/utils"
 )
@@ -11,7 +12,6 @@ func main() {
 	const maxLength = 72
 
 	pwd := make([]byte, 0, maxLength)
-	for i := range pwd { pwd[i] = 0 }
 
 	fmt.Println("======= CLI Password Utils =======")
 	exit := false
@@ -31,7 +31,9 @@ func main() {
 	}
 
 	fmt.Println("Erasing password ....")
-	for i := range pwd { pwd[i] = 0}
+	// Zero out password bytes in memory before exit to avoid leaving sensitive data behind
+	tools.Reset(&pwd)
+	
 	fmt.Println("...")
 	fmt.Println("Password erased.")
 	fmt.Println("Goodbye!")

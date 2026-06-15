@@ -25,11 +25,11 @@ func Repeated(ppwd *[]byte) {
 }
 
 func getRepeated(ppwd *[]byte) map[byte]int {
+	if ppwd == nil { return nil }
+
 	repeated := map[byte]int{}
 	for _, b := range *ppwd {
-		if b != 0 {
-			repeated[b]++
-		}
+		if b != 0 {	repeated[b]++	}
 	}
 
 	for b, n := range repeated {

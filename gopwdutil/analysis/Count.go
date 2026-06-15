@@ -9,51 +9,52 @@ import (
 func Count(ppwd *[]byte, choice int) {
 	if ppwd == nil { return }
 
-	count := get_count(ppwd, choice)
+	count := getCount(ppwd, choice)
 	if count == -1 {
 		fmt.Println("Error: password is nil")
 		return
 	}
 
-	count_type := get_count_type(choice)
-	count_unit := get_count_unit(count, choice)
+	countType := getCountType(choice)
+	countUnit := getCountUnit(count, choice)
 
-	fmt.Printf("======> %s count: %d %s\n", count_type, count, count_unit)
+	fmt.Printf("======> %s count: %d %s\n", countType, count, countUnit)
 	fmt.Print("        Press Enter to continue... ")
 	fmt.Scanln()
 }
 
-func get_count_type(choice int) string {
-	count_type := ""
+func getCountType(choice int) string {
+	countType := ""
 	switch choice {
-		case 1: count_type = "Character"
-		case 2: count_type = "Word"
-		case 3: count_type = "Letter character"
-		case 4: count_type = "Uppercase character"
-		case 5: count_type = "Lowercase character"
-		case 6: count_type = "Numeric character"
-		case 7: count_type = "Special character"
+		case 1: countType = "Character"
+		case 2: countType = "Word"
+		case 3: countType = "Letter character"
+		case 4: countType = "Uppercase character"
+		case 5: countType = "Lowercase character"
+		case 6: countType = "Numeric character"
+		case 7: countType = "Special character"
 	}
 
-	return count_type
+	return countType
 }
 
-func get_count(ppwd *[]byte, choice int) int {
+func getCount(ppwd *[]byte, choice int) int {
+	if ppwd == nil { return -1 }
 	count := 0
 	switch choice {
-		case 1: count = count_char(ppwd)
-		case 2: count = count_word(ppwd)
-		case 3: count = count_letter(ppwd)
-		case 4: count = count_upper(ppwd)
-		case 5: count = count_lower(ppwd)
-		case 6: count = count_numeric(ppwd)
-		case 7: count = count_special(ppwd)
+		case 1: count = countChar(ppwd)
+		case 2: count = countWord(ppwd)
+		case 3: count = countLetter(ppwd)
+		case 4: count = countUpper(ppwd)
+		case 5: count = countLower(ppwd)
+		case 6: count = countNumeric(ppwd)
+		case 7: count = countSpecial(ppwd)
 	}
 
 	return count
 }
 
-func get_count_unit(count int, choice int) string {
+func getCountUnit(count int, choice int) string {
 	unit := ""
 	if count > 0 {
 		switch choice {
@@ -74,15 +75,20 @@ func get_count_unit(count int, choice int) string {
 	return unit
 }
 
-func count_char(ppwd *[]byte) int {
+func countChar(ppwd *[]byte) int {
+	if ppwd == nil { return -1 }
 	return len(strings.ReplaceAll(string(*ppwd), " ", ""))
 }
 
-func count_word(ppwd *[]byte) int {
+func countWord(ppwd *[]byte) int {
+	if ppwd == nil { return -1 }
+
 	return len(strings.Fields(string(*ppwd)))
 }
 
-func count_letter(ppwd *[]byte) int {
+func countLetter(ppwd *[]byte) int {
+	if ppwd == nil { return -1 }
+
 	var letters = append(lowercase, uppercase...)
 
 	count := 0
@@ -93,7 +99,9 @@ func count_letter(ppwd *[]byte) int {
 	return count
 }
 
-func count_upper(ppwd *[]byte) int {
+func countUpper(ppwd *[]byte) int {
+	if ppwd == nil { return -1 }
+
 	count := 0
 	for i := range *ppwd {
 		if tools.ContainsByte((*ppwd)[i], uppercase) { count += 1 }
@@ -102,7 +110,9 @@ func count_upper(ppwd *[]byte) int {
 	return count
 }
 
-func count_lower(ppwd *[]byte) int {
+func countLower(ppwd *[]byte) int {
+	if ppwd == nil { return -1 }
+
 	count := 0
 	for i := range *ppwd {
 		if tools.ContainsByte((*ppwd)[i], lowercase) { count += 1 }
@@ -111,7 +121,9 @@ func count_lower(ppwd *[]byte) int {
 	return count
 }
 
-func count_numeric(ppwd *[]byte) int {
+func countNumeric(ppwd *[]byte) int {
+	if ppwd == nil { return -1 }
+
 	count := 0
 	for i := range *ppwd {
 		if tools.ContainsByte((*ppwd)[i], numeric) { count += 1 }
@@ -120,7 +132,9 @@ func count_numeric(ppwd *[]byte) int {
 	return count
 }
 
-func count_special(ppwd *[]byte) int {
+func countSpecial(ppwd *[]byte) int {
+	if ppwd == nil { return -1 }
+
 	count := 0
 	for i := range *ppwd {
 		if tools.ContainsByte((*ppwd)[i], special) { count += 1 }

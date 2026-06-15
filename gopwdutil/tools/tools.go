@@ -5,4 +5,4 @@ import (
 	"os"
 )
 
-var reader = bufio.NewReader(os.Stdin)
+var Reader = bufio.NewReader(os.Stdin)

@@ -6,8 +6,9 @@ func Strength(ppwd *[]byte) {
 	if ppwd == nil { return }
 
 	score := 0
-	length := count_char(ppwd)
+	length := countChar(ppwd)
 
+	// Score based on length tiers; longer passwords earn exponentially more points	
 	scoreLength := 0
 	switch {
 		case length >= 72:  scoreLength += 32
@@ -18,13 +19,14 @@ func Strength(ppwd *[]byte) {
 	}
 	score += scoreLength
 
-	scoreUpper 		:= count_upper(ppwd)
-	scoreLower 		:= count_lower(ppwd)
-	scoreNumeric 	:= count_numeric(ppwd)
-	scoreSpecial 	:= count_special(ppwd)
+	scoreUpper 		:= countUpper(ppwd)
+	scoreLower 		:= countLower(ppwd)
+	scoreNumeric 	:= countNumeric(ppwd)
+	scoreSpecial 	:= countSpecial(ppwd)
 
 	score += scoreUpper + scoreLower + scoreNumeric + scoreSpecial
 
+	// Penalize passwords with many repeated characters; fewer repeats = higher score	
 	repeatedCount := len(getRepeated(ppwd))
 	scoreRepeated := 0
 	switch {
@@ -34,7 +36,9 @@ func Strength(ppwd *[]byte) {
 		case repeatedCount == 1: scoreRepeated += 4
 		case repeatedCount == 0: scoreRepeated += 8
 	}
+	score += scoreRepeated
 
+	// Strength label thresholds are relative to the max achievable score	
 	var label string
 	switch {
 		case score >= 16: label = "Very Strong"

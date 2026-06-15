@@ -1,8 +1,10 @@
 package input
 
 import (
+	"crypto/rand"
 	"fmt"
-	"math/rand"
+	"gopwdutil/tools"
+	"math/big"
 	"strconv"
 	"strings"
 )
@@ -14,7 +16,7 @@ func Random(ppwd *[]byte, minLength int, maxLength int) {
 	fmt.Printf("min %d, max %d characters\n", minLength, maxLength)
 	fmt.Print("Enter desired length: ")
 
-	line, _ := reader.ReadString('\n')
+	line, _ := tools.Reader.ReadString('\n')
 	raw := strings.TrimRight(line, "\r\n")
 	length, err := strconv.Atoi(raw)
 	if err != nil {
@@ -27,8 +29,13 @@ func Random(ppwd *[]byte, minLength int, maxLength int) {
 		return
 	}
 
-	for i := range *ppwd { (*ppwd)[i] = 0 }
+	tools.Reset(ppwd)
 	for i := 0; i < length; i++ {
-		*ppwd = append(*ppwd, characters[rand.Intn(len(characters))])
+		j, err := rand.Int(rand.Reader, big.NewInt(int64(len(characters))))
+		if err != nil {
+			fmt.Println("Error: randomizing error")
+			return
+		}
+		*ppwd = append(*ppwd, characters[j.Int64()])
 	}
 }

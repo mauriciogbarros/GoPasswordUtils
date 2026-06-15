@@ -1,8 +1,10 @@
 package transform
 
 import (
+	"crypto/rand"
 	"fmt"
-	"math/rand"
+	"gopwdutil/tools"
+	"math/big"
 )
 
 func Scramble(ppwd *[]byte) {
@@ -12,15 +14,25 @@ func Scramble(ppwd *[]byte) {
 	length := len(*ppwd)
 	scrambled := []byte{}
 	for i := 0; i < length; i++ {
-		j := rand.Intn(length - i)
-		scrambled = append(scrambled, (*ppwd)[j])
-		*ppwd = append((*ppwd)[:j],(*ppwd)[j + 1:]...)
+		j, err := rand.Int(rand.Reader, big.NewInt(int64(length - i)))
+		if err != nil {
+			fmt.Println("Error: randomizing error")
+			return
+		}
+
+		// Pick a random index from the remaining unselected bytes, then remove it from the pool
+		idx := j.Int64()
+		scrambled = append(scrambled, (*ppwd)[idx])
+
+		// remove selected byte from pool
+		*ppwd = append((*ppwd)[:idx], (*ppwd)[idx+1:]...)
 	}
 
-	for i := 0; i < length; i++ {
-		*ppwd = append(*ppwd, scrambled[i])
-		scrambled[i] = 0
-	}
+	// Copy scrambled to ppwd
+	*ppwd = append(*ppwd, scrambled...)
+
+	// Zero out scrambled
+	tools.Reset(&scrambled)
 	fmt.Println("Scrambled password:", string(*ppwd))
 	fmt.Print("Press Enter to continue ...")
 	fmt.Scanln()

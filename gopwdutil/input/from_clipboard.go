@@ -2,6 +2,7 @@ package input
 
 import (
 	"fmt"
+	"gopwdutil/tools"
 	"strings"
 
 	"golang.design/x/clipboard"
@@ -16,6 +17,7 @@ func FromClipboard(ppwd *[]byte, minLength int, maxLength int) {
 		return
 	}
 
+	// Clear clipboard first to ensure we read only what the user explicitly copies next	
 	clipboard.Write(clipboard.FmtText, []byte(""))
 	fmt.Print("Copy string to clipboard and press Enter to continue... ")
 	fmt.Scanln()
@@ -30,15 +32,18 @@ func FromClipboard(ppwd *[]byte, minLength int, maxLength int) {
 
 	if strings.TrimSpace(string(data)) == "" {
 		fmt.Println("Error: white space only.")
+		clipboard.Write(clipboard.FmtText, []byte(""))
 		return
 	}
 
 	if len(data) < minLength || len(data) > maxLength {
 		fmt.Println("Error: invalid password length")
+		clipboard.Write(clipboard.FmtText, []byte(""))
 		return
 	}
 
-	for i := range *ppwd { (*ppwd)[i] = 0 }
+	tools.Reset(ppwd)
+
 	for i := range data {
 		*ppwd = append(*ppwd, data[i])
 	}

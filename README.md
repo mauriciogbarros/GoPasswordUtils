@@ -4,6 +4,9 @@ A menu-driven Go command-line application for creating and analysing passwords. 
 
 This is a portfolio project and a study on password security. On a production scenario, the password would not be saved as plain text, and the pepper would be stored outside of the database. Exporting to an external file is part of this exercise only and should not be handled this way in a real-world scenario.
 
+Finally, the weights considered for the password strength evaluation were a best guess, and in a real-world scenario they should be set with inputs from a experienced professional in password security.
+
+
 ## Table of Contents
 - [Features](#features)
 - [Project Structure](#project-structure)
